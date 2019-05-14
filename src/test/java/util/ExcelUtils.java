@@ -1,6 +1,6 @@
 package util;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -13,8 +13,6 @@ public class ExcelUtils {
     private static XSSFSheet excelWSheet;
 
     private static XSSFWorkbook excelWBook;
-
-    private static XSSFCell xssfCell;
 
     public static Object[][] getTableArray(String filePath, String sheetName) throws Exception {
 
@@ -54,21 +52,15 @@ public class ExcelUtils {
 
                     tabArray[ci][cj] = getCellData(i, j);
 
-                    System.out.println(tabArray[ci][cj]);
-
                 }
 
             }
 
         } catch (FileNotFoundException e) {
 
-            System.out.println("Could not read the Excel sheet");
-
             e.printStackTrace();
 
         } catch (IOException e) {
-
-            System.out.println("Could not read the Excel sheet");
 
             e.printStackTrace();
 
@@ -78,28 +70,19 @@ public class ExcelUtils {
 
     }
 
-    public static String getCellData(int rowNum, int colNum) throws Exception {
+    private static String getCellData(int rowNum, int colNum) throws Exception {
 
+        DataFormatter formatter = new DataFormatter();
         try {
 
-            xssfCell = excelWSheet.getRow(rowNum).getCell(colNum);
+            //get the value from cell using row and col number and then  format it into String irrespective of original format
+            String cellData = formatter.formatCellValue(excelWSheet.getRow(rowNum).getCell(colNum));
 
-            int dataType = xssfCell.getColumnIndex();
+           return cellData;
 
-            if (dataType == 3) {
-
-                return "";
-
-            } else {
-
-                String CellData = xssfCell.getStringCellValue();
-
-                return CellData;
-
-            }
         }catch(Exception e){
 
-                System.out.println(e.getMessage());
+                e.getMessage();
 
                 throw (e);
 
